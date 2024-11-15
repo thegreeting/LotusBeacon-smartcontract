@@ -1,5 +1,23 @@
 {
   "name": "lotus-beacon-smart-contract",
+  "scripts": {
+    "clean": "hardhat clean && rimraf cache build contracts/build",
+    "clear": "yarn run clean && && rimraf node_modules",
+    "lint": "yarn run lint:ts && yarn run lint:sol",
+    "lint:fix": "yarn run lint:ts:fix && yarn run lint:sol:fix",
+    "lint:ts": "eslint --ignore-path .gitignore .",
+    "lint:ts:fix": "eslint --ignore-path .gitignore . --fix",
+    "lint:sol": "solhint 'contracts/**/*.sol' && prettier -c .",
+    "lint:sol:fix": "prettier --write .",
+    "accounts": "hardhat accounts",
+    "balances": "hardhat balances",
+    "list-network": "hardhat list-network",
+    "coverage": "env COVERAGE=true hardhat coverage",
+    "test": "hardhat test",
+    "gas-report": "env REPORT_GAS=true yarn run test",
+    "compile": "hardhat compile",
+    "prepare": "yarn run clean && env COMPILE_MODE=production yarn run compile"
+  },
   "devDependencies": {
     "@nomicfoundation/hardhat-toolbox": "^5.0.0",
     "hardhat": "^2.22.15"
