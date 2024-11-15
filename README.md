@@ -1,0 +1,1 @@
+# LotusBeacon - Smart Contract
