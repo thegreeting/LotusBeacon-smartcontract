@@ -13,7 +13,7 @@ contract LotusBeaconContract {
     }
 
     struct GreetData {
-        uint256 eventId;
+        string eventId; // updated from uint256 to string
         uint256 myUserEventIndex;
         uint256 greetedUserEventIndex;
         // PhysicalSensingData should be an array, but unfortunaltely nested array is not supported in Solidity, so it's needed to be flatten.
@@ -26,38 +26,39 @@ contract LotusBeaconContract {
 
     // Event emitted when a user registers for an event
     event UserRegistered(
-        uint256 indexed eventId,
+        string indexed eventId,
         uint256 indexed userEventIndex,
         address indexed userAddress
     );
 
     event Greeted(
-        uint256 indexed eventId,
+        string indexed eventId,
         uint256 indexed greetedUserEventIndex,
         uint256 indexed myUserEventIndex
     );
 
     // EventId => UserAddress => UserEventIndex
     // Example - userEventRegistrations[1][0x1234] = 4
-    mapping (uint256 => mapping(address => uint256)) public userEventRegistrations;
+    mapping (string => mapping(address => uint256)) public userEventRegistrations;
 
     // EventId => UserEventIndex => GreetedUserEventIndex => boolean
     // Example - isUserGreetedTo[1][4][5] = true
-    mapping (uint256 => mapping(uint256 => mapping (uint256 => bool))) public isUserGreetedTo;
+    mapping (string => mapping(uint256 => mapping (uint256 => bool))) public isUserGreetedTo;
 
     // EventId => GreetData[]
-    mapping (uint256 => GreetData[]) public greetDataRecords;
+    mapping (string => GreetData[]) public greetDataRecords;
 
     // constructor
     // as of now, do nothing here.
     constructor() { }
 
 
-    function greet(uint256 eventId, uint256 greetedUserEventIndex, PhysicalSensingData[] calldata physicalSensingData) public {
+    function greet(string memory eventId, uint256 greetedUserEventIndex, PhysicalSensingData[] calldata physicalSensingData) public {
 
         require(greetedUserEventIndex != 0, "greetedUserEventIndex cannot be 0");
 
         // Get the user's event index
+        // TODO: Remove this line for demonstration purposes
         uint256 myUserEventIndex = userEventRegistrations[eventId][msg.sender];
         require(myUserEventIndex != 0, "User not registered for the event");
 
@@ -92,7 +93,7 @@ contract LotusBeaconContract {
 
 
     // Register for an event
-    function registerForEvent(uint256 eventId) public {
+    function registerForEvent(string memory eventId) public {
         // Get the user's event index
         uint256 userEventIndex = userEventRegistrations[eventId][msg.sender];
 
@@ -109,7 +110,7 @@ contract LotusBeaconContract {
     }
 
     // Get the user's event index for a specific event
-    function getUserEventIndex(uint256 eventId, address userAddress) public view returns (uint256) {
+    function getUserEventIndex(string memory eventId, address userAddress) public view returns (uint256) {
         return userEventRegistrations[eventId][userAddress];
     }
     
