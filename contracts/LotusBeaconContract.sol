@@ -58,7 +58,6 @@ contract LotusBeaconContract {
         require(greetedUserEventIndex != 0, "greetedUserEventIndex cannot be 0");
 
         // Get the user's event index
-        // TODO: Remove this line for demonstration purposes
         uint256 myUserEventIndex = userEventRegistrations[eventId][msg.sender];
         require(myUserEventIndex != 0, "User not registered for the event");
 

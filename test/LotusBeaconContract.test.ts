@@ -41,6 +41,17 @@ describe("LotusBeaconContract", function () {
         expect(greetData.physicalSensingData5.RPID).to.equal(0);
     });
 
+    it("should not greet a user that is not registered for the event", async function () {
+        const greetedUserEventIndex = 10
+        const physicalSensingData: LotusBeaconContract.PhysicalSensingDataStruct[] = [
+            { RPID: 123, RSSI: 456, transmitPower: 789 }
+        ];
+
+        await expect(
+            lotusBeaconContract.connect(addr1).greet("event1", greetedUserEventIndex, physicalSensingData)
+        ).to.be.revertedWith("User not registered for the event");
+    });
+
     it("should not greet the same user twice", async function () {
         await lotusBeaconContract.connect(addr1).registerForEvent("event1");
         const userEventIndex = await lotusBeaconContract.getUserEventIndex("event1", addr1.address);
